@@ -1,0 +1,13 @@
+add_executable(2.OOP
+        main.cpp
+        Point.cpp
+        Point.h
+        Rectangle.cpp
+        Rectangle.h
+        Distance.cpp
+        Distance.h
+        String.cpp
+        String.h
+        Student.cpp
+        Student.h
+)
