@@ -8,3 +8,5 @@ set(CMAKE_OSX_ARCHITECTURES "x86_64")
 
 add_subdirectory(1.HelloWorld)
 add_subdirectory(2.OOP)
+add_subdirectory(3.Building)
+#add_subdirectory(4.DynStructures)
