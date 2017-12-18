@@ -1,60 +1,56 @@
 #include "Stack.h"
 
-#include <cstdlib>
-#include <iostream>
-
-struct Stack* CreateStack(unsigned int size)
-{
-    struct Stack* result = (struct Stack*)malloc(sizeof(Stack));
-    result->bottom = (struct Data**)malloc(sizeof(struct Data*) * size);
-    result->size = size;
-    result->pos = 0;
-    return result;
-}
-
-void DestroyStack(struct Stack* stack)
-{
-    free(stack->bottom);
-    free(stack);
-}
-
-void Push(struct Stack* stack, Data* data)
-{
-    if (stack->pos < stack->size)
-    {
-        stack->bottom[stack->pos] = data;
-        ++stack->pos;
-    }
-    else
-    {
-        std::cout << "Stack is full" << std::endl;
+Stack::Stack(std::initializer_list<std::string> const& list) {
+    for (auto& item : list) {
+        PushBack(item);
     }
 }
 
-Data* Top(const struct Stack* stack)
-{
-    if (stack->pos > 0)
-    {
-        return stack->bottom[stack->pos - 1];
+Stack::~Stack() {
+    while (_tail) {
+        StackItem* item = _tail;
+        _tail = item->previous;
+        delete item;
     }
-    return NULL;
 }
 
-Data* Pop(struct Stack* stack)
-{
-    if (stack->pos > 0)
-    {
-        return stack->bottom[--stack->pos];
+Stack::Stack(Stack const& stack) {
+    ReverseInsert(stack._tail);
+}
+
+void Stack::PushBack(std::string const& data) {
+    StackItem *item = new StackItem;
+    item->data = data;
+    item->previous = _tail;
+    _tail = item;
+}
+
+std::string Stack::PopBack() {
+    if (_tail) {
+        std::string data(std::move(_tail->data));
+
+        StackItem *item = _tail;
+        _tail = _tail->previous;
+
+        delete item;
+        return std::move(data);
     }
-    return NULL;
+    return std::string();
 }
 
-int GetCount(const struct Stack* stack)
-{
-    return stack->pos;
+std::size_t Stack::Count() const {
+    std::size_t count = 0;
+    StackItem* item = _tail;
+    while (item) {
+        item = item->previous;
+        count++;
+    }
+    return count;
 }
 
-bool IsEmpty(const struct Stack* stack)
-{
-    return stack->pos <= 0;
+void Stack::ReverseInsert(StackItem* item) {
+    if (item->previous != nullptr) {
+        ReverseInsert(item->previous);
+    }
+    PushBack(item->data);
 }

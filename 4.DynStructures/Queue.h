@@ -1,19 +1,26 @@
 #pragma once
 
-#include "Data.h"
+#include <cstddef>
+#include <string>
+#include <initializer_list>
 
-struct Queue
-{
-    struct Data** FirstChunk;
-    struct Data** SecondChunk;
-    unsigned int size;
-    unsigned int bottom;
-    unsigned int top;
+class Queue {
+    struct QueueItem {
+        std::string data;
+        QueueItem* next = nullptr;
+    };
+public:
+    Queue() = default;
+    Queue(std::initializer_list<std::string> const& list);
+    ~Queue();
+    Queue(Queue const& queue);
+    void PushBack(std::string const& data);
+    std::string PopFront();
+
+    std::size_t Count() const;
+
+private:
+
+    QueueItem* _head = nullptr;
+    QueueItem* _tail = nullptr;
 };
-
-struct Queue* CreateQueue(unsigned int size);
-void DestroyQueue(struct Queue* queue);
-void Push(struct Queue* queue, struct Data* data);
-struct Data* Pop(struct Queue* queue);
-unsigned int GetCount(const struct Queue* queue);
-bool IsEmpty(const struct Queue* queue);

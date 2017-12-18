@@ -1,18 +1,26 @@
 #pragma once
 
-#include "Data.h"
+#include <cstddef>
+#include <string>
+#include <initializer_list>
 
-struct Stack
-{
-    Data** bottom;
-    int pos;
-    unsigned int size;
+class Stack {
+    struct StackItem {
+        std::string data;
+        StackItem* previous = nullptr;
+    };
+public:
+    Stack() = default;
+    Stack(std::initializer_list<std::string> const& list);
+    ~Stack();
+    Stack(Stack const& stack);
+    void PushBack(std::string const& data);
+    std::string PopBack();
+
+    std::size_t Count() const;
+
+private:
+    void ReverseInsert(StackItem* item);
+
+    StackItem* _tail = nullptr;
 };
-
-struct Stack* CreateStack(unsigned int size);
-void DestroyStack(struct Stack* stack);
-void Push(struct Stack* stack, Data* data);
-Data* Top(const struct Stack* stack);
-Data* Pop(struct Stack* stack);
-int GetCount(const struct Stack* stack);
-bool IsEmpty(const struct Stack* stack);
